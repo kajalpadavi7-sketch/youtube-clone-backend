@@ -10,7 +10,10 @@ import com.kajal.backend.dto.LoginResponse;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+    "http://localhost:5173",
+    "https://youtube-clone-frontend-sigma-liard.vercel.app"
+})
 public class UserController {
 
     @Autowired
