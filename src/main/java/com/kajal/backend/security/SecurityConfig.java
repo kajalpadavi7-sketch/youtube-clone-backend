@@ -34,22 +34,24 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
         .csrf(csrf -> csrf.disable())
 
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers(
-                    "/",
-                    "/api/users/register",
-                    "/api/users/login",
-                    "/api/videos",
-                    "/videos/**",
-                    "/thumbnails/**"
-            ).permitAll()
+    .requestMatchers(
+            "/",
+            "/api/users/register",
+            "/api/users/login",
 
-            .requestMatchers("/api/videos/upload")
-            .authenticated()
+            "/api/videos",
+            "/api/videos/**",
 
-            .anyRequest()
-            .authenticated()
-        )
+            "/videos/**",
+            "/thumbnails/**"
+    ).permitAll()
 
+    .requestMatchers("/api/videos/upload")
+    .authenticated()
+
+    .anyRequest()
+    .authenticated()
+)
         .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         )
