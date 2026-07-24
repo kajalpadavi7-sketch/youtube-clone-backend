@@ -1,1 +1,17 @@
 target/
+
+# Uploaded media
+upload/videos/*
+upload/thumbnails/*
+!upload/videos/.gitkeep
+!upload/thumbnails/.gitkeep
+
+# Logs
+*.log
+
+# IDE
+.idea/
+.vscode/
+
+# Environment
+.env

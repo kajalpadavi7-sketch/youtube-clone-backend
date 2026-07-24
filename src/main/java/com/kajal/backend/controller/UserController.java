@@ -16,13 +16,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/register")
-    public User registerUser(@RequestBody RegisterRequest request) {
-        return userService.registerUser(request);
-    }
+    // @PostMapping("/register")
+    // public User registerUser(@RequestBody RegisterRequest request) {
+    //     return userService.registerUser(request);
+    // }
     @PostMapping("/login")
     public LoginResponse loginUser(@RequestBody LoginRequest request)
     {
     return userService.loginUser(request);
+    }
+    @PostMapping("/register")
+    public User registerUser(@RequestBody RegisterRequest request) {
+
+    System.out.println("REGISTER API HIT");
+
+    return userService.registerUser(request);
 }
 }

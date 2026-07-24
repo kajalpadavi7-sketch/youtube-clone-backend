@@ -26,68 +26,41 @@ public class SecurityConfig {
     private JwtFilter jwtFilter;
 
 
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-
-        http
-
+    http
         .cors(cors -> {})
-
         .csrf(csrf -> csrf.disable())
 
-
         .authorizeHttpRequests(auth -> auth
+            .requestMatchers(
+                    "/",
+                    "/api/users/register",
+                    "/api/users/login",
+                    "/api/videos",
+                    "/videos/**",
+                    "/thumbnails/**"
+            ).permitAll()
 
+            .requestMatchers("/api/videos/upload")
+            .authenticated()
 
-                // Public APIs
-
-                .requestMatchers(
-                        "/api/users/register",
-                        "/api/users/login",
-                        "/api/videos",
-                        "/videos/**",
-                        "/thumbnails/**"
-                )
-                .permitAll()
-
-
-
-                // Protected API
-
-                .requestMatchers(
-                        "/api/videos/upload"
-                )
-                .authenticated()
-
-
-
-                .anyRequest()
-                .authenticated()
-
-
+            .anyRequest()
+            .authenticated()
         )
-
 
         .sessionManagement(session ->
-                session.sessionCreationPolicy(
-                        SessionCreationPolicy.STATELESS
-                )
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         )
-
 
         .addFilterBefore(
                 jwtFilter,
                 UsernamePasswordAuthenticationFilter.class
         );
 
-
-
-        return http.build();
-
-    }
-
+    return http.build();
+}
 
 
 
