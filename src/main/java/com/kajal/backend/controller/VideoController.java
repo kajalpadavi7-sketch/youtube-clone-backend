@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 @RestController
 @RequestMapping("/api/videos")
-@CrossOrigin(origins = "http://localhost:5173")
 public class VideoController {
 
     @Autowired
