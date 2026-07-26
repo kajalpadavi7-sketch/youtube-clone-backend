@@ -18,16 +18,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:/home/kaju/projects/youtube-clone/upload/thumbnails/");
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-
-        registry.addMapping("/**")
-                .allowedOrigins(
-                        "http://localhost:5173",
-                        "https://youtube-clone-frontend-sigma-liard.vercel.app"
-                )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
     }
-}

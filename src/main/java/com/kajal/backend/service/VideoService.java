@@ -49,9 +49,10 @@ video.transferTo(new File(videoPath));
 thumbnail.transferTo(new File(thumbnailPath));
 
 // Save URLs in database
-String videoUrl = "/videos/" + video.getOriginalFilename();
-String thumbnailUrl = "/thumbnails/" + thumbnail.getOriginalFilename();
+String baseUrl = "https://youtube-clone-backend-fsq5.onrender.com";
 
+String videoUrl = baseUrl + "/videos/" + video.getOriginalFilename();
+String thumbnailUrl = baseUrl + "/thumbnails/" + thumbnail.getOriginalFilename();
         // Find logged in user
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));

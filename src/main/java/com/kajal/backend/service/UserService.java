@@ -9,8 +9,7 @@ import com.kajal.backend.entity.User;
 import com.kajal.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kajal.backend.dto.UserResponse;
-import com.kajal.backend.security.JwtService;
+
 
 @Service
 public class UserService {
