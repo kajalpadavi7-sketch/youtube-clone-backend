@@ -25,28 +25,30 @@ public class JwtFilter extends OncePerRequestFilter {
     private CustomUserDetailsService customUserDetailsService;
 
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+      @Override
+protected void doFilterInternal(HttpServletRequest request,
+                                HttpServletResponse response,
+                                FilterChain filterChain)
+        throws ServletException, IOException {
 
-            System.out.println("========== JWT FILTER ==========");
-System.out.println("URI = " + request.getRequestURI());
-System.out.println("Authorization = " + request.getHeader("Authorization"));
-    System.out.println("Request URI: " + request.getRequestURI());
+    System.out.println("========== JWT FILTER ==========");
+    System.out.println("URI = " + request.getRequestURI());
+    System.out.println("Authorization = " + request.getHeader("Authorization"));
 
-        String authHeader = request.getHeader("Authorization");
+    String authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        filterChain.doFilter(request, response);
+        return;
+    }
 
-        String token = authHeader.substring(7);
+    String token = authHeader.substring(7);
+
+    try {
         String email = jwtService.extractUsername(token);
 
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (email != null &&
+                SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails =
                     customUserDetailsService.loadUserByUsername(email);
@@ -60,13 +62,18 @@ System.out.println("Authorization = " + request.getHeader("Authorization"));
                                 userDetails.getAuthorities());
 
                 authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request));
+                        new WebAuthenticationDetailsSource()
+                                .buildDetails(request));
 
                 SecurityContextHolder.getContext()
                         .setAuthentication(authentication);
             }
         }
 
-        filterChain.doFilter(request, response);
+    } catch (Exception e) {
+        System.out.println("Invalid JWT: " + e.getMessage());
     }
+
+    filterChain.doFilter(request, response);
+}
 }

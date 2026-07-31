@@ -42,17 +42,18 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .csrf(csrf -> csrf.disable())
 
-        .authorizeHttpRequests(auth -> auth
+    .authorizeHttpRequests(auth -> auth
+
     .requestMatchers(
-            "/",
-            "/api/users/register",
-            "/api/users/login",
-
-            "/api/videos",
-            "/api/videos/**",
-
-            "/videos/**",
-            "/thumbnails/**"
+        "/",
+        "/error",
+        "/api/users",
+        "/api/users/register",
+        "/api/users/login",
+        "/api/videos",
+        "/api/videos/test",
+        "/videos/**",
+        "/thumbnails/**"
     ).permitAll()
 
     .requestMatchers("/api/videos/upload")
@@ -108,6 +109,9 @@ public CorsConfigurationSource corsConfigurationSource(){
 
     configuration.setAllowedHeaders(
             List.of("*")
+    );
+    configuration.setExposedHeaders(
+            List.of("Content-Range", "Accept-Ranges", "Content-Length", "Content-Type")
     );
 
     configuration.setAllowCredentials(true);

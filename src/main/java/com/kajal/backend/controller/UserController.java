@@ -24,10 +24,12 @@ public class UserController {
     //     return userService.registerUser(request);
     // }
     @PostMapping("/login")
-    public LoginResponse loginUser(@RequestBody LoginRequest request)
-    {
+public LoginResponse loginUser(@RequestBody LoginRequest request) {
+
+    System.out.println("LOGIN API HIT");
+
     return userService.loginUser(request);
-    }
+}
     @PostMapping("/register")
     public User registerUser(@RequestBody RegisterRequest request) {
 

@@ -1,7 +1,6 @@
 package com.kajal.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +11,10 @@ import com.kajal.backend.repository.VideoRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,12 +27,6 @@ public class VideoService {
     @Autowired
     private UserRepository userRepository;
 
-    @Value("${file.upload.video}")
-    private String videoFolder;
-
-    @Value("${file.upload.thumbnail}")
-    private String thumbnailFolder;
-
     public String uploadVideo(
             String title,
             String description,
@@ -37,22 +34,33 @@ public class VideoService {
             MultipartFile video,
             MultipartFile thumbnail) throws IOException {
 
-        // Create folders if not exists
-        new File(videoFolder).mkdirs();
-        new File(thumbnailFolder).mkdirs();
+        // --- FIXED PATH LOGIC ---
+        String baseDir = System.getProperty("user.dir");
+        
+        String videoFolder = baseDir + File.separator + "upload" + File.separator + "videos" + File.separator;
+        String thumbnailFolder = baseDir + File.separator + "upload" + File.separator + "thumbnails" + File.separator;
 
-        String videoPath = videoFolder + video.getOriginalFilename();
-String thumbnailPath = thumbnailFolder + thumbnail.getOriginalFilename();
+        // Create folders if they do not exist
+        File vDir = new File(videoFolder);
+        File tDir = new File(thumbnailFolder);
+        if (!vDir.exists()) vDir.mkdirs();
+        if (!tDir.exists()) tDir.mkdirs();
 
-// Save files on disk
-video.transferTo(new File(videoPath));
-thumbnail.transferTo(new File(thumbnailPath));
+        // Convert String paths to java.nio.file.Path objects
+        Path targetVideoPath = Paths.get(videoFolder).resolve(video.getOriginalFilename());
+        Path targetThumbnailPath = Paths.get(thumbnailFolder).resolve(thumbnail.getOriginalFilename());
 
-// Save URLs in database
-String baseUrl = "https://youtube-clone-backend-fsq5.onrender.com";
+        // --- SECURE STORAGE LOGIC ---
+        // transferTo() ki jagah Files.copy use karein (Tomcat restriction bypass karne ke liye)
+        Files.copy(video.getInputStream(), targetVideoPath, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(thumbnail.getInputStream(), targetThumbnailPath, StandardCopyOption.REPLACE_EXISTING);
 
-String videoUrl = baseUrl + "/videos/" + video.getOriginalFilename();
-String thumbnailUrl = baseUrl + "/thumbnails/" + thumbnail.getOriginalFilename();
+        // Save URLs in database
+        String baseUrl = "http://localhost:8080";
+
+        String videoUrl = baseUrl + "/videos/" + video.getOriginalFilename();
+        String thumbnailUrl = baseUrl + "/thumbnails/" + thumbnail.getOriginalFilename();
+        
         // Find logged in user
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -72,8 +80,8 @@ String thumbnailUrl = baseUrl + "/thumbnails/" + thumbnail.getOriginalFilename()
 
         videoRepository.save(videoData);
 
-        System.out.println("Video Saved At : " + videoPath);
-        System.out.println("Thumbnail Saved At : " + thumbnailPath);
+        System.out.println("Video Saved At : " + targetVideoPath.toString());
+        System.out.println("Thumbnail Saved At : " + targetThumbnailPath.toString());
 
         return "Files Saved Successfully";
     }
