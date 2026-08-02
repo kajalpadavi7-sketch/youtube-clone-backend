@@ -51,16 +51,19 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
         "/api/users/register",
         "/api/users/login",
         "/api/videos",
-        "/api/videos/test",
+        "/api/videos/**",
         "/videos/**",
-        "/thumbnails/**"
+        "/thumbnails/**",
+        "/api/comments/video/**",
+        "/api/likes/**"
     ).permitAll()
 
-    .requestMatchers("/api/videos/upload")
-    .authenticated()
+    .requestMatchers(
+        "/api/videos/upload",
+        "/api/comments"
+    ).authenticated()
 
-    .anyRequest()
-    .authenticated()
+    .anyRequest().authenticated()
 )
         .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

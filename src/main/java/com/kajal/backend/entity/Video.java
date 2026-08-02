@@ -29,6 +29,9 @@ public class Video {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uploaded_by")
     private User user;
+   // private Long dislikes = 0L;
+   private Long likes = 0L;
+private Long dislikes = 0L;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -46,6 +49,7 @@ public class Video {
     public void setUser(User user) {
         this.user = user;
     }
+
     public String getTitle() {
     return title;
     }
@@ -85,4 +89,16 @@ public class Video {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+    public Long getDislikes() {
+        return dislikes;
+    }
+    public void setDislikes(Long dislikes) {
+        this.dislikes = dislikes;
+    }
+    public Long getLikes() {
+    return likes;
+}
+public void setLikes(Long likes) {
+    this.likes = likes;
+}
 }

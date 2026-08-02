@@ -31,6 +31,11 @@ public class VideoController {
 public List<VideoResponse> getAllVideos() {
     return videoService.getAllVideos();
 }
+
+@GetMapping("/{id}")
+public VideoResponse getVideoById(@PathVariable Long id) {
+    return videoService.getVideoById(id);
+}
     //@PostMapping("/upload")
     @PostMapping(value = "/upload", consumes = "multipart/form-data")
         public String uploadVideo(
@@ -50,5 +55,13 @@ public List<VideoResponse> getAllVideos() {
         video,
         thumbnail
 );
+}
+@PutMapping("/{id}/dislike")
+public Video dislikeVideo(@PathVariable Long id) {
+    return videoService.dislikeVideo(id);
+}
+@PostMapping("/like/{id}")
+public Video likeVideo(@PathVariable Long id) {
+    return videoService.likeVideo(id);
 }
 }

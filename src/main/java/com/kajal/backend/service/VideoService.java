@@ -19,14 +19,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 import com.kajal.backend.dto.VideoResponse;
 
+
+
 @Service
 public class VideoService {
 
     @Autowired
-    private VideoRepository videoRepository;
+    
+private VideoRepository videoRepository;
 
     @Autowired
     private UserRepository userRepository;
+
 
     public String uploadVideo(
             String title,
@@ -87,6 +91,24 @@ public class VideoService {
 
         return "Files Saved Successfully";
     }
+ public Video dislikeVideo(Long id) {
+
+    Video video = videoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Video not found"));
+
+    video.setDislikes(video.getDislikes() + 1);
+
+    return videoRepository.save(video);
+}
+public Video likeVideo(Long id) {
+
+    Video video = videoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Video not found"));
+
+    video.setLikes(video.getLikes() + 1);
+
+    return videoRepository.save(video);
+}
 
     public List<VideoResponse> getAllVideos() {
         return videoRepository.findAll().stream()
@@ -101,4 +123,19 @@ public class VideoService {
                 ))
                 .collect(java.util.stream.Collectors.toList());
     }
+    public VideoResponse getVideoById(Long id) {
+
+    Video video = videoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Video not found"));
+
+    return new VideoResponse(
+            video.getId(),
+            video.getTitle(),
+            video.getDescription(),
+            video.getVideoUrl(),
+            video.getThumbnailUrl(),
+            video.getUser().getChannelName(),
+            video.getUser().getProfileImage()
+    );
+}
 }
