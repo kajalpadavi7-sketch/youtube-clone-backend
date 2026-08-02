@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import com.kajal.backend.dto.VideoResponse;
 
 
 
@@ -25,8 +26,9 @@ public class VideoController {
     public String test() {
     return "Video Controller Working";
     }
-    @GetMapping
-public List<Video> getAllVideos() {
+
+@GetMapping
+public List<VideoResponse> getAllVideos() {
     return videoService.getAllVideos();
 }
     //@PostMapping("/upload")

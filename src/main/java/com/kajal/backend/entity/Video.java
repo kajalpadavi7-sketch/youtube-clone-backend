@@ -23,8 +23,12 @@ public class Video {
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
-    @Column(name = "uploaded_by")
-    private Long uploadedBy;
+    //@Column(name = "uploaded_by")
+    //@Column(name = "uploaded_by")
+    //private Long uploadedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "uploaded_by")
+    private User user;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -35,13 +39,19 @@ public class Video {
     public Long getId() {
         return id;
     }
+    public User getUser() {
+        return user;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
     public String getTitle() {
-        return title;
+    return title;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+    this.title = title;
     }
 
     public String getDescription() {
@@ -66,14 +76,6 @@ public class Video {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
-    }
-
-    public Long getUploadedBy() {
-        return uploadedBy;
-    }
-
-    public void setUploadedBy(Long uploadedBy) {
-        this.uploadedBy = uploadedBy;
     }
 
     public LocalDateTime getCreatedAt() {

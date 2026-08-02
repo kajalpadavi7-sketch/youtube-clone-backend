@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
+import com.kajal.backend.dto.VideoResponse;
 
 @Service
 public class VideoService {
@@ -75,7 +76,8 @@ public class VideoService {
         videoData.setVideoUrl(videoUrl);
         videoData.setThumbnailUrl(thumbnailUrl);
 
-        videoData.setUploadedBy(user.getId());
+      //  videoData.setUploadedBy(user.getId());
+        videoData.setUser(user);
         videoData.setCreatedAt(LocalDateTime.now());
 
         videoRepository.save(videoData);
@@ -86,7 +88,17 @@ public class VideoService {
         return "Files Saved Successfully";
     }
 
-    public List<Video> getAllVideos() {
-        return videoRepository.findAll();
+    public List<VideoResponse> getAllVideos() {
+        return videoRepository.findAll().stream()
+                .map(video -> new VideoResponse(
+                        video.getId(),
+                        video.getTitle(),
+                        video.getDescription(),
+                        video.getVideoUrl(),
+                        video.getThumbnailUrl(),
+                        video.getUser().getChannelName(),
+                        video.getUser().getProfileImage()
+                ))
+                .collect(java.util.stream.Collectors.toList());
     }
 }
