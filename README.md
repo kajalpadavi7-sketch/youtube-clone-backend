@@ -1,78 +1,204 @@
 # 🎬 YouTube Clone - Backend
 
-The backend engine of the YouTube Clone application built using **Java Spring Boot**, **Spring Security**, **PostgreSQL**, and **JWT Authentication**.
+A RESTful backend for a YouTube Clone built with Java Spring Boot. It provides secure JWT authentication, video upload, video streaming, likes, comments, view counting, and channel management.
 
 ---
 
-# 📌 Project Description
+# 📌 Project Overview
 
-This module handles secure user authentication, robust video/thumbnail asset management, multi-part handling, database operations via Hibernate/JPA, and exposes REST APIs for the client application.
+This backend exposes REST APIs for a YouTube Clone application.
 
----
+It handles:
 
-# 🚀 Features Completed
-
-- **Authentication Module:**
-  - User Registration & Login endpoints.
-  - Password Encryption using `BCrypt`.
-  - Stateless JSON Web Token (`JWT`) authentication flow.
-  - Custom `JwtFilter` integrated before `UsernamePasswordAuthenticationFilter`.
-  - Secure Spring Security configuration with tailored public/private API routes.
-  - PostgreSQL user database management.
-
-- **Video Asset Module:**
-  - Video and Thumbnail dynamic multipart uploads.
-  - Isolated server filesystem storage for streaming assets.
-  - Automated database record indexing mapping exact URLs to media files.
-  - Custom data layers via Video Entity, Repository, Service, and Controller blocks.
-  - Video Feed Endpoint (`GET /api/videos`) with public cross-origin accessibility.
+- User authentication
+- JWT authorization
+- Video upload
+- Thumbnail upload
+- Video streaming
+- View counting
+- Like / Dislike
+- Comments
+- Channel information
+- PostgreSQL database operations
 
 ---
 
-# 🛠 Tech Stack
+# 🚀 Features
 
-- **Core Language:** Java 21
-- **Framework:** Spring Boot 3.x
-- **Security:** Spring Security & JWT (JsonWebToken)
-- **Data Layers:** Spring Data JPA & Hibernate
-- **Database Engine:** PostgreSQL
-- **Build Automation:** Maven (using Maven Wrapper `./mvnw`)
+## 🔐 Authentication
+
+- User Registration
+- User Login
+- BCrypt Password Encryption
+- JWT Authentication
+- Spring Security
+- Protected APIs
+- Stateless Authentication
 
 ---
 
-# 📂 Folder Structure
+## 🎥 Video Management
 
-```text
+- Upload Videos
+- Upload Thumbnails
+- Store video metadata in PostgreSQL
+- Stream videos
+- Update video title
+- Update video description
+- Update video thumbnail
+- Automatically count video views
+
+---
+
+## 👍 Engagement
+
+- Like Video
+- Dislike Video
+- Comment on Videos
+- View comments
+
+---
+
+## 👤 Channel
+
+- Channel Name
+- Profile Image
+- Display uploader information
+- Owner verification before editing videos
+
+---
+
+## 🛠 Tech Stack
+
+- Java 21
+- Spring Boot 3
+- Spring Security
+- JWT
+- Spring Data JPA
+- Hibernate
+- PostgreSQL
+- Maven
+
+---
+
+# 📂 Project Structure
+
 backend/
-├── src/main/java/com/kajal/backend
-│   ├── config/
-│   │   ├── PasswordConfig.java
-│   │   └── WebConfig.java
-│   ├── controller/
-│   │   ├── UserController.java
-│   │   └── VideoController.java
-│   ├── dto/
-│   │   ├── LoginRequest.java
-│   │   ├── LoginResponse.java
-│   │   ├── RegisterRequest.java
-│   │   ├── UserResponse.java
-│   │   ├── VideoRequest.java
-│   │   └── VideoResponse.java
-│   ├── entity/
-│   │   ├── User.java
-│   │   └── Video.java
-│   ├── repository/
-│   │   ├── UserRepository.java
-│   │   └── VideoRepository.java
-│   ├── security/
-│   │   ├── CustomUserDetailsService.java
-│   │   ├── JwtFilter.java
-│   │   ├── JwtService.java
-│   │   └── SecurityConfig.java
-│   ├── service/
-│   │   ├── UserService.java
-│   │   └── VideoService.java
-├── resources/
-│   └── application.properties
-├── pom.xml
-└── mvnw
+├── controller/
+│ ├── UserController.java
+│ ├── VideoController.java
+│ ├── CommentController.java
+│ └── LikeController.java
+│
+├── service/
+│ ├── UserService.java
+│ ├── VideoService.java
+│ ├── CommentService.java
+│ └── LikeService.java
+│
+├── repository/
+│ ├── UserRepository.java
+│ ├── VideoRepository.java
+│ ├── CommentRepository.java
+│ └── LikeRepository.java
+│
+├── entity/
+│ ├── User.java
+│ ├── Video.java
+│ ├── Comment.java
+│ └── Like.java
+│
+├── dto/
+│ ├── LoginRequest.java
+│ ├── RegisterRequest.java
+│ ├── VideoResponse.java
+│ └── ...
+│
+├── security/
+│ ├── JwtFilter.java
+│ ├── JwtService.java
+│ ├── SecurityConfig.java
+│ └── CustomUserDetailsService.java
+
+---
+
+# Database
+
+PostgreSQL
+
+Tables
+
+- users
+- videos
+- comments
+- likes
+
+---
+
+# API Endpoints
+
+## Authentication
+
+POST /api/users/register
+
+POST /api/users/login
+
+---
+
+## Videos
+
+GET /api/videos
+
+GET /api/videos/{id}
+
+POST /api/videos/upload
+
+PUT /api/videos/{id}
+
+POST /api/videos/like/{id}
+
+PUT /api/videos/{id}/dislike
+
+---
+
+## Comments
+
+GET /api/comments/{videoId}
+
+POST /api/comments
+
+---
+
+## Likes
+
+POST /api/likes
+
+GET /api/likes/{videoId}
+
+---
+
+# Security
+
+- JWT Authentication
+- BCrypt Password Encryption
+- Stateless Sessions
+- Protected Upload APIs
+- Owner verification before updating videos
+
+---
+
+# Future Improvements
+
+- Delete Video
+- My Channel
+- Search Videos
+- Subscribe System
+- Notifications
+- Watch History
+- Playlist
+- Watch Later
+- Recommendations
+- Cloud Storage (AWS S3 / Cloudinary)
+
+---
+
