@@ -28,6 +28,7 @@ public class CommentService {
     @Autowired
     private UserRepository userRepository;
 
+
     public void addComment(CommentRequest request, String email) {
 
         User user = userRepository.findByEmail(email)
@@ -46,6 +47,7 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+
     public List<CommentResponse> getComments(Long videoId) {
 
         return commentRepository
@@ -54,12 +56,11 @@ public class CommentService {
                 .map(comment -> new CommentResponse(
                         comment.getId(),
                         comment.getComment(),
+                        comment.getUser().getId(),
                         comment.getUser().getChannelName(),
                         comment.getUser().getProfileImage(),
                         comment.getCreatedAt()
                 ))
                 .collect(Collectors.toList());
-
     }
-
 }

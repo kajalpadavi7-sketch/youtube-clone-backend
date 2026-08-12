@@ -3,8 +3,10 @@ target/
 # Uploaded media
 upload/videos/*
 upload/thumbnails/*
+upload/profiles/*
 !upload/videos/.gitkeep
 !upload/thumbnails/.gitkeep
+!upload/profiles/.gitkeep
 
 # Logs
 *.log

@@ -16,6 +16,9 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/thumbnails/**")
                 .addResourceLocations("file:upload/thumbnails/");
+
+        registry.addResourceHandler("/profiles/**")
+                .addResourceLocations("file:upload/profiles/");
     }
 
     @Override
