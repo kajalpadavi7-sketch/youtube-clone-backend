@@ -1,5 +1,6 @@
 package com.kajal.backend.dto;
 import com.kajal.backend.dto.VideoResponse;
+import java.time.LocalDateTime;
 
 public class VideoResponse {
 
@@ -11,6 +12,9 @@ public class VideoResponse {
     private String channelName;
     private String profileImage;
 
+    private Long views;
+    private LocalDateTime createdAt;
+
 
     public VideoResponse() {
     }
@@ -21,7 +25,9 @@ public class VideoResponse {
                          String videoUrl,
                          String thumbnailUrl,
                          String channelName,
-                         String profileImage) {
+                         String profileImage,
+                         Long views,
+                         LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -29,6 +35,8 @@ public class VideoResponse {
         this.thumbnailUrl = thumbnailUrl;
         this.channelName = channelName;
         this.profileImage = profileImage;
+        this.views = views;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -57,5 +65,10 @@ public class VideoResponse {
     public String getProfileImage() {
         return profileImage;
     }
-
+    public Long getViews() {
+        return views;
+    }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }

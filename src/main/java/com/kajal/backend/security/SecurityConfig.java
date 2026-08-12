@@ -92,13 +92,13 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 public CorsConfigurationSource corsConfigurationSource(){
 
     CorsConfiguration configuration = new CorsConfiguration();
-
-    configuration.setAllowedOrigins(
-            List.of(
-                    "http://localhost:5173",
-                    "https://youtube-clone-frontend-sigma-liard.vercel.app"
-            )
-    );
+configuration.setAllowedOrigins(
+        List.of(
+                "http://localhost:5173",
+                "http://192.168.1.12:5173",
+                "https://youtube-clone-frontend-sigma-liard.vercel.app"
+        )
+);
 
     configuration.setAllowedMethods(
             List.of(

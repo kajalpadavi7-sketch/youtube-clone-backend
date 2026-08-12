@@ -31,7 +31,10 @@ public class Video {
     private User user;
    // private Long dislikes = 0L;
    private Long likes = 0L;
-private Long dislikes = 0L;
+    
+    @Column(name = "views", nullable = false)
+    private Long views = 0L;
+    private Long dislikes = 0L;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -95,10 +98,16 @@ private Long dislikes = 0L;
     public void setDislikes(Long dislikes) {
         this.dislikes = dislikes;
     }
+    public Long getViews() {
+        return views;
+    }
+    public void setViews(Long views) {
+        this.views = views;
+    }
     public Long getLikes() {
     return likes;
-}
-public void setLikes(Long likes) {
+    }
+    public void setLikes(Long likes) {
     this.likes = likes;
 }
 }
