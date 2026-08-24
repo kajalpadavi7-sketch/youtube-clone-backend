@@ -27,7 +27,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(
                         "http://localhost:5173",
-                        "http://192.168.1.12:5173",
+                        "http://192.168.1.35:5173",
                         "https://youtube-clone-frontend-sigma-liard.vercel.app"
                 )
                 .allowedMethods(

@@ -19,7 +19,7 @@ import java.io.IOException;
 @RequestMapping("/api/users")
 @CrossOrigin(origins = {
         "http://localhost:5173",
-        "http://192.168.1.12:5173",
+        "http://192.168.1.35:5173",
         "https://youtube-clone-frontend-sigma-liard.vercel.app"
 })
 public class UserController {

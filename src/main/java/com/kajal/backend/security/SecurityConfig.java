@@ -98,7 +98,7 @@
 // configuration.setAllowedOrigins(
 //         List.of(
 //                 "http://localhost:5173",
-//                 "http://192.168.1.12:5173",
+
 //                 "https://youtube-clone-frontend-sigma-liard.vercel.app"
 //         )
 // );
@@ -278,7 +278,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(
             List.of(
                 "http://localhost:5173",
-                "http://192.168.1.12:5173",
+                "http://192.168.1.35:5173",
                 "https://youtube-clone-frontend-sigma-liard.vercel.app"
             )
         );
