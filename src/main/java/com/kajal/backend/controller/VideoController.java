@@ -6,6 +6,7 @@ import com.kajal.backend.dto.UpdateVideoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.kajal.backend.service.VideoService;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,13 +14,22 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.kajal.backend.dto.VideoResponse;
+import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 
 @RestController
 @RequestMapping("/api/videos")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://10.232.120.250:5173"
+})
 public class VideoController {
-
     @Autowired
     private VideoService videoService;
 
@@ -95,5 +105,14 @@ public Video dislikeVideo(@PathVariable Long id) {
 @PostMapping("/like/{id}")
 public Video likeVideo(@PathVariable Long id) {
     return videoService.likeVideo(id);
+}
+@GetMapping("/{id}/recommended")
+public ResponseEntity<List<VideoResponse>> getRecommendedVideos(
+        @PathVariable Long id) {
+
+    List<VideoResponse> recommendations =
+            videoService.getRecommendedVideos(id);
+
+    return ResponseEntity.ok(recommendations);
 }
 }

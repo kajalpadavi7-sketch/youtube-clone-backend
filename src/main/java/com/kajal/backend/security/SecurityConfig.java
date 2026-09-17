@@ -276,12 +276,14 @@ public class SecurityConfig {
                 new CorsConfiguration();
 
         configuration.setAllowedOrigins(
-            List.of(
-                "http://localhost:5173",
-                "http://192.168.1.35:5173",
-                "https://youtube-clone-frontend-sigma-liard.vercel.app"
-            )
-        );
+    List.of(
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://10.232.120.250:5173",
+        "http://10.232.120.250:5174",
+        "https://youtube-clone-frontend-sigma-liard.vercel.app"
+    )
+);
 
 
         configuration.setAllowedMethods(

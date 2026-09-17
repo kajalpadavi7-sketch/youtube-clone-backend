@@ -3,7 +3,10 @@ import com.kajal.backend.dto.UpdateVideoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import org.springframework.transaction.annotation.Transactional;
 import com.kajal.backend.entity.User;
 import com.kajal.backend.entity.Video;
 import com.kajal.backend.repository.UserRepository;
@@ -17,7 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
-import java.util.List;
+
 import com.kajal.backend.dto.VideoResponse;
 
 
@@ -115,6 +118,41 @@ String thumbnailFolder = baseDir
 
         return "Files Saved Successfully";
     }
+    private Set<String> extractWords(String text) {
+
+    if (text == null || text.isBlank()) {
+        return Collections.emptySet();
+    }
+
+    Set<String> stopWords = Set.of(
+            "the",
+            "a",
+            "an",
+            "is",
+            "are",
+            "and",
+            "or",
+            "to",
+            "of",
+            "in",
+            "on",
+            "for",
+            "with",
+            "this",
+            "that",
+            "video",
+            "new"
+    );
+
+    return Arrays.stream(
+                    text.toLowerCase()
+                            .replaceAll("[^a-zA-Z0-9 ]", " ")
+                            .split("\\s+")
+            )
+            .filter(word -> word.length() > 2)
+            .filter(word -> !stopWords.contains(word))
+            .collect(Collectors.toSet());
+}
  public Video dislikeVideo(Long id) {
 
     Video video = videoRepository.findById(id)
@@ -123,6 +161,108 @@ String thumbnailFolder = baseDir
     video.setDislikes(video.getDislikes() + 1);
 
     return videoRepository.save(video);
+}
+@Transactional(readOnly = true)
+public List<VideoResponse> getRecommendedVideos(Long currentVideoId) {
+
+    // Current video
+    Video currentVideo = videoRepository.findById(currentVideoId)
+            .orElseThrow(() -> new RuntimeException("Video not found"));
+
+    // Current video's title + description
+    Set<String> currentWords = extractWords(
+            currentVideo.getTitle() + " " +
+            (currentVideo.getDescription() == null
+                    ? ""
+                    : currentVideo.getDescription())
+    );
+
+    Long currentUserId = currentVideo.getUser().getId();
+
+    // Get all videos
+    List<Video> allVideos = videoRepository.findAll();
+
+    return allVideos.stream()
+
+            // Current video ko recommendation mein mat dikhana
+            .filter(video -> !video.getId().equals(currentVideoId))
+
+            // Har video ka recommendation score calculate karo
+            .map(video -> {
+
+                Set<String> videoWords = extractWords(
+                        video.getTitle() + " " +
+                        (video.getDescription() == null
+                                ? ""
+                                : video.getDescription())
+                );
+
+                // Common words
+                long commonWords = videoWords.stream()
+                        .filter(currentWords::contains)
+                        .count();
+
+                double score = 0;
+
+                // 1. Similar title/description
+                score += commonWords * 10;
+
+                // 2. Same channel
+                if (video.getUser().getId().equals(currentUserId)) {
+                    score += 20;
+                }
+
+                // 3. Views
+                if (video.getViews() != null) {
+                    score += Math.log10(video.getViews() + 1) * 2;
+                }
+
+                // 4. Recent videos ko small bonus
+                if (video.getCreatedAt() != null) {
+                    long daysOld = java.time.Duration.between(
+                            video.getCreatedAt(),
+                            LocalDateTime.now()
+                    ).toDays();
+
+                    if (daysOld <= 7) {
+                        score += 5;
+                    } else if (daysOld <= 30) {
+                        score += 3;
+                    }
+                }
+
+                return new RecommendationResult(video, score);
+            })
+
+            // Highest score first
+            .sorted(
+                    Comparator.comparingDouble(
+                            RecommendationResult::score
+                    ).reversed()
+            )
+
+            // ONLY 8 recommendations
+            .limit(8)
+
+            // Convert Video -> VideoResponse
+            .map(result -> {
+
+                Video video = result.video();
+
+                return new VideoResponse(
+                        video.getId(),
+                        video.getTitle(),
+                        video.getDescription(),
+                        video.getVideoUrl(),
+                        video.getThumbnailUrl(),
+                        video.getUser().getChannelName(),
+                        video.getUser().getProfileImage(),
+                        video.getViews(),
+                        video.getCreatedAt()
+                );
+            })
+
+            .collect(Collectors.toList());
 }
 public Video likeVideo(Long id) {
 
@@ -173,6 +313,11 @@ videoRepository.save(video);
             video.getViews(),
             video.getCreatedAt()
     );
+}
+private record RecommendationResult(
+        Video video,
+        double score
+) {
 }
 public String updateVideo(
         Long id,
